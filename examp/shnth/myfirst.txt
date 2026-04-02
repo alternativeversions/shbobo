@@ -1,0 +1,51 @@
+; myfirst — ambient and weird
+; left hand: bars a+b drift the filter
+; right hand: corp antennas warp pitch + density
+; minor buttons: trigger bursts
+; orange (tar): silence
+
+{
+  ; left channel:
+  ; fog = granular triangles, triggered by slow random pulses
+  ; bar controls how fast grains fire
+  ; corp warps grain pitch
+  ; mount slowly rocks the filter frequency
+  (left
+    (fog
+      (dust (bar 40) 20)   ; trig: bar A controls grain rate
+      8 64                  ; envelope speed + width
+      (corp 10 80)          ; grain pitch warped by antenna
+      64                    ; grain loudness
+    )
+    (water
+      (dust 2)              ; steady slow filter pings
+      2                     ; Q (resonance)
+      (mount 6 80)          ; filter freq drifts slowly
+    )
+    (swoop (minor) 4 60     ; minor A: burst of filtered noise
+      (smoke 30))
+  )
+
+  ; right channel:
+  ; haze = granular sawtooth, denser texture
+  ; barb controls density, corpb warps pitch
+  (right
+    (haze
+      (dustb (barb 40) 20) ; barb controls grain rate
+      10 64                 ; envelope speed + width
+      (corpb 10 80)         ; grain pitch warped by antenna B
+      48
+    )
+    (wave
+      (smoke 8)             ; filtered noise underneath
+      1                     ; Q
+      (mount 7 64)          ; filter drifts (slightly different rate)
+    )
+    (swoopb (minorb) 4 60   ; minor B: burst on right
+      (smokeb 30))
+  )
+
+  ; tar (orange button) = mute everything when held
+  (left  (tar 0))
+  (right (tar 0))
+}
