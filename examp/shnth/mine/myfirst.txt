@@ -1,7 +1,10 @@
 ; myfirst — ambient and weird
-; left hand: bars a+b drift the filter
-; right hand: corp antennas warp pitch + density
-; minor buttons: trigger bursts
+; bar a+b: grain rate left/right
+; bar c: rhythm tempo
+; bar d: rhythm volume
+; corp antennas: warp grain pitch
+; minor a+b: noise bursts
+; major a: skip rhythm forward
 ; orange (tar): silence
 
 {
@@ -43,6 +46,27 @@
     )
     (swoopb (minorb) 4 60   ; minor B: burst on right
       (smokeb 30))
+  )
+
+  ; --- rhythm layer ---
+  ; gear clocks off dust, divides into a slower pulse
+  ; togo sequences pitch values — major A skips forward
+  ; barc controls tempo, bard controls volume
+
+  (togo  (gear (dustc (barc 20) 8) 4) (major)   ; advance on gear, skip on major A
+    5 8 12 5 3 8)                                 ; pitch sequence (low = bass-y)
+  (togob (gear (dustc)            6) (majorb)    ; second sequence, offset division
+    10 14 8 18 7 12)
+
+  (left
+    (pulse (gear (dustc) 4) 80                   ; kick-like: short noise burst on beat
+      (smoke 4))
+    (horn (togo) 64 (bard 20))                   ; melodic rhythm, bard = volume
+  )
+  (right
+    (pulse (gear (dustc) 6) 60                   ; offbeat noise hit
+      (smokeb 4))
+    (hornb (togob) 48 (bard 20))                 ; second voice, quieter
   )
 
   ; tar (orange button) = mute everything when held
