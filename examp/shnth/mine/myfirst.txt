@@ -1,75 +1,59 @@
 ; myfirst — ambient and weird
-; bar a+b: grain rate left/right
+; bar a: left grain rate
+; bar b: right grain rate
 ; bar c: rhythm tempo
 ; bar d: rhythm volume
 ; corp antennas: warp grain pitch
 ; minor a+b: noise bursts
-; major a: skip rhythm forward
-; orange (tar): silence
+; major a+b: skip rhythm sequence forward
 
 {
-  ; left channel:
-  ; fog = granular triangles, triggered by slow random pulses
-  ; bar controls how fast grains fire
-  ; corp warps grain pitch
-  ; mount slowly rocks the filter frequency
   (left
     (fog
-      (dust (bar 40) 20)   ; trig: bar A controls grain rate
-      8 64                  ; envelope speed + width
-      (corp 10 80)          ; grain pitch warped by antenna
-      64                    ; grain loudness
+      (dust (bar 40) 20)    ; bar A: grain rate
+      8 64
+      (corp 10 80)           ; corp L: grain pitch
+      64
     )
     (water
-      (dust 2)              ; steady slow filter pings
-      2                     ; Q (resonance)
-      (mount 6 80)          ; filter freq drifts slowly
+      (dustb 2)              ; dustb: independent from fog's dust
+      2
+      (mount 6 80)           ; mount: slow filter sweep
     )
-    (swoop (minor) 4 60     ; minor A: burst of filtered noise
+    (swoop (minor) 4 60
       (smoke 30))
   )
 
-  ; right channel:
-  ; haze = granular sawtooth, denser texture
-  ; barb controls density, corpb warps pitch
   (right
     (haze
-      (dustb (barb 40) 20) ; barb controls grain rate
-      10 64                 ; envelope speed + width
-      (corpb 10 80)         ; grain pitch warped by antenna B
+      (dustc (barb 40) 20)  ; dustc: bar B controls grain rate
+      10 64
+      (corpb 10 80)          ; corp R: grain pitch
       48
     )
     (wave
-      (smoke 8)             ; filtered noise underneath
-      1                     ; Q
-      (mount 7 64)          ; filter drifts (slightly different rate)
+      (smokeb 8)
+      1
+      (mountb 7 64)          ; mountb: independent sweep from mount
     )
-    (swoopb (minorb) 4 60   ; minor B: burst on right
-      (smokeb 30))
+    (swoopb (minorb) 4 60
+      (smokec 30))
   )
 
-  ; --- rhythm layer ---
-  ; gear clocks off dust, divides into a slower pulse
-  ; togo sequences pitch values — major A skips forward
-  ; barc controls tempo, bard controls volume
-
-  (togo  (gear (dustc (barc 20) 8) 4) (major)   ; advance on gear, skip on major A
-    5 8 12 5 3 8)                                 ; pitch sequence (low = bass-y)
-  (togob (gear (dustc)            6) (majorb)    ; second sequence, offset division
+  ; rhythm: dustd is the shared clock, barc controls tempo
+  (togo  (gear (dustd (barc 20) 8) 4) (major)
+    5 8 12 5 3 8)
+  (togob (gear (dustd)            6) (majorb)
     10 14 8 18 7 12)
 
   (left
-    (pulse (gear (dustc) 4) 80                   ; kick-like: short noise burst on beat
-      (smoke 4))
-    (horn (togo) 64 (bard 20))                   ; melodic rhythm, bard = volume
+    (pulse (gear (dustd) 4) 80
+      (smoked 4))
+    (horn (togo) 64 (bard 20))   ; bard: rhythm volume
   )
   (right
-    (pulse (gear (dustc) 6) 60                   ; offbeat noise hit
-      (smokeb 4))
-    (hornb (togob) 48 (bard 20))                 ; second voice, quieter
+    (pulse (gear (dustd) 6) 60
+      (smokee 4))
+    (hornb (togob) 48 (bard 20))
   )
-
-  ; tar (orange button) = mute everything when held
-  (left  (tar 0))
-  (right (tar 0))
 }
